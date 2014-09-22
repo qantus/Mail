@@ -6,6 +6,9 @@ use Mindy\Base\Module;
 
 class MailModule extends Module
 {
+    // public $logoPath = '/static/dist/images/main/logo.png';
+    public $logoPath;
+
     public function getMenu()
     {
         return [

@@ -3,6 +3,6 @@
 return [
     '/checker' => [
         'name' => 'checker',
-        'callback' => '\Modules\Mail\Controllers\MailChecker::checker'
+        'callback' => '\Modules\Mail\Controllers\MailCheckerController::index'
     ]
 ];

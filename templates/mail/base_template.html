@@ -26,14 +26,15 @@
                                             <tr>
                                                 <td>
                                                     {% block logo %}
-                                                        <img class="center"
-                                                             src='{{ convert_base64('/static/dist/images/main/logo.png') }}'/>
+                                                        {% if logoPath %}
+                                                        <img class="center" src='{{ convert_base64(logoPath) }}'/>
+                                                        {% endif %}
                                                     {% endblock %}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="padding">
-                                                    {% block content %}{{ content }}{% endblock %}
+                                                    {% block content %}{{ content|safe }}{% endblock %}
                                                 </td>
                                             </tr>
                                         </table>
@@ -43,7 +44,7 @@
                             <table class="footer">
                                 <tr>
                                     <td class="padding contacts">
-                                        {% block contacts %}{{ contacts }}{% endblock %}
+                                        {% block contacts %}{{ contacts|safe }}{% endblock %}
                                     </td>
                                 </tr>
                             </table>

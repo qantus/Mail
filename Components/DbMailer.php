@@ -11,14 +11,18 @@ use Modules\Mail\Models\MailTemplate;
 
 class DbMailer extends Mailer
 {
+    /**
+     * @var string http domain
+     */
     public $domain;
-
+    /**
+     * @var bool enable reading email checker
+     */
     public $checker = true;
 
     public function fromCode($code, $receiver, $data = [])
     {
         $uniq = uniqid();
-
         $template = $this->loadTemplateModel($code);
 
         $subject = $this->renderString($template->subject, $data);
@@ -28,18 +32,19 @@ class DbMailer extends Mailer
             $message .= "<img src='{$url}'>";
         }
 
-        $result = $this->compose([
+        $msg = $this->compose([
             'text' => "mail/message.txt",
             'html' => "mail/message.html",
-        ], array_merge(['content' => $message], $data))
-            ->setTo($receiver)
-            ->setFrom(Mindy::app()->managers)
-            ->setSubject($subject)
-            ->send();
+        ], array_merge([
+            'content' => $message,
+            'logoPath' => Mindy::app()->getModule('Mail')->logoPath
+        ], $data));
+        $msg->setTo($receiver);
+        $msg->setFrom(Mindy::app()->managers);
+        $msg->setSubject($subject);
 
-        if($result) {
-            $model = new Mail();
-            $model->setAttributes([
+        if($result = $msg->send()) {
+            $model = new Mail([
                 'receiver' => is_array($receiver) ? key($receiver) : $receiver,
                 'subject' => $subject,
                 'message' => $message,
@@ -60,7 +65,7 @@ class DbMailer extends Mailer
         if ($this->domain) {
             return $this->domain;
         } else if (Console::isCli() === false) {
-            return Mindy::app()->request->getHostInfo();
+            return Mindy::app()->request->http->getHostInfo();
         }
 
         return null;
