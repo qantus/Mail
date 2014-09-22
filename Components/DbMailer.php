@@ -60,7 +60,7 @@ class DbMailer extends Mailer
         if ($this->domain) {
             return $this->domain;
         } else if (Console::isCli() === false) {
-            return Mindy::app()->request->getHostInfo();
+            return Mindy::app()->request->http->getHostInfo();
         }
 
         return null;
