@@ -29,6 +29,10 @@ class MailTemplateAdmin extends ModelAdmin
         return MailTemplateForm::className();
     }
 
+    public function getColumns()
+    {
+        return ['id', 'code', 'subject'];
+    }
     /**
      * @return \Mindy\Orm\Model
      */
