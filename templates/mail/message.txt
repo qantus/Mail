@@ -1,1 +1,1 @@
-{{ content }}
+{{ content|nl2br }}
