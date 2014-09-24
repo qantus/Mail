@@ -6,6 +6,7 @@ use Mindy\Base\Exception\HttpException;
 use Mindy\Base\Mindy;
 use Mindy\Helper\Console;
 use Mindy\Mail\Mailer;
+use Modules\Core\Components\ParamsHelper;
 use Modules\Mail\Models\Mail;
 use Modules\Mail\Models\MailTemplate;
 
@@ -40,7 +41,7 @@ class DbMailer extends Mailer
             'logoPath' => Mindy::app()->getModule('Mail')->logoPath
         ], $data));
         $msg->setTo($receiver);
-        $msg->setFrom(Mindy::app()->managers);
+        $msg->setFrom(ParamsHelper::get('core.core.email_owner'));
         $msg->setSubject($subject);
 
         if($result = $msg->send()) {
