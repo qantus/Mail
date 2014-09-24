@@ -21,7 +21,7 @@ class DbMailer extends Mailer
      */
     public $checker = true;
 
-    public function fromCode($code, $receiver, $data = [])
+    public function fromCode($code, $receiver, $data = [], $attachments = [])
     {
         $uniq = uniqid();
         $template = $this->loadTemplateModel($code);
@@ -43,7 +43,14 @@ class DbMailer extends Mailer
         $msg->setTo($receiver);
         $msg->setFrom(ParamsHelper::get('core.core.email_owner'));
         $msg->setSubject($subject);
-
+        if (!empty($attachments)) {
+            if (!is_array($attachments)) {
+                $attachments = [$attachments];
+            }
+            foreach($attachments as $file) {
+                $msg->attach($file);
+            }
+        }
         if($result = $msg->send()) {
             $model = new Mail([
                 'receiver' => is_array($receiver) ? key($receiver) : $receiver,
