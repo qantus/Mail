@@ -29,7 +29,7 @@ class DbMailer extends Mailer
         $message = $this->renderString($template->template, $data);
         if ($this->checker && $domain = $this->getDomain()) {
             $url = $domain . Mindy::app()->urlManager->reverse('mail.checker', ['uniq' => $uniq]);
-            $message .= "<img src='{$url}'>";
+            $message .= "<img width='1' height='1' src='{$url}'>";
         }
 
         $msg = $this->compose([
