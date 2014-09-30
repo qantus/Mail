@@ -13,10 +13,6 @@ use Modules\Mail\Models\MailTemplate;
 class DbMailer extends Mailer
 {
     /**
-     * @var string http domain
-     */
-    public $domain;
-    /**
      * @var bool enable reading email checker
      */
     public $checker = true;
@@ -28,9 +24,10 @@ class DbMailer extends Mailer
 
         $subject = $this->renderString($template->subject, $data);
         $message = $this->renderString($template->template, $data);
-        if ($this->checker && $domain = $this->getDomain()) {
-            $url = $domain . Mindy::app()->urlManager->reverse('mail.checker', ['uniq' => $uniq]);
-            $message .= "<img width='1' height='1' src='{$url}'>";
+        if ($this->checker) {
+            $url = Mindy::app()->urlManager->reverse('mail.checker', ['id' => $template->pk]);
+            $absUrl = Mindy::app()->request->http->absoluteUrl($url);
+            $message .= "<img width='1' height='1' src='{$absUrl}'>";
         }
 
         $msg = $this->compose([
@@ -38,7 +35,8 @@ class DbMailer extends Mailer
             'html' => "mail/message.html",
         ], array_merge([
             'content' => $message,
-            'logoPath' => Mindy::app()->getModule('Mail')->logoPath
+            'logoPath' => Mindy::app()->getModule('Mail')->logoPath,
+            'subject' => $subject
         ], $data));
         $msg->setTo($receiver);
         $msg->setFrom(ParamsHelper::get('core.core.email_owner'));

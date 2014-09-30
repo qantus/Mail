@@ -34,7 +34,10 @@
                                             </tr>
                                             <tr>
                                                 <td class="padding">
-                                                    {% block content %}{{ content|safe }}{% endblock %}
+                                                    {% block content %}
+                                                        <h1>{{ subject }}</h1>
+                                                        {{ content|nl2br|safe }}
+                                                    {% endblock %}
                                                 </td>
                                             </tr>
                                         </table>
