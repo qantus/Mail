@@ -14,7 +14,8 @@ class MailTemplate extends Model
         return [
             'code' => [
                 'class' => CharField::className(),
-                'null' => false
+                'null' => false,
+                'unique' => true
             ],
             'subject' => [
                 'class' => CharField::className(),
