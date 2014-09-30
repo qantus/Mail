@@ -2,8 +2,7 @@
 
 namespace Modules\Mail\Commands;
 
-use Mindy\Base\ConsoleCommand;
-use Mindy\Base\Mindy;
+use Mindy\Console\ConsoleCommand;
 use Mindy\Helper\Creator;
 
 /**
@@ -20,7 +19,7 @@ class MailCommand extends ConsoleCommand
 {
     public function actionIndex($to, $template = null)
     {
-        echo $this->color("Sending test mail to " . $to, 'green') . PHP_EOL;
+        echo "Sending test mail to " . $to . PHP_EOL;
 
         $data = [];
         $mail = Creator::createObject([

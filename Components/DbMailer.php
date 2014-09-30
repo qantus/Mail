@@ -45,11 +45,11 @@ class DbMailer extends Mailer
             if (!is_array($attachments)) {
                 $attachments = [$attachments];
             }
-            foreach($attachments as $file) {
+            foreach ($attachments as $file) {
                 $msg->attach($file);
             }
         }
-        if($result = $msg->send()) {
+        if ($result = $msg->send()) {
             $model = new Mail([
                 'receiver' => is_array($receiver) ? key($receiver) : $receiver,
                 'subject' => $subject,
