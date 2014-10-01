@@ -17,18 +17,18 @@ use Mindy\Helper\Creator;
  */
 class MailCommand extends ConsoleCommand
 {
-    public function actionIndex($to, $template = null)
+    public function actionIndex($to, $from = 'admin@admin.com', $template = "mail/test")
     {
         echo "Sending test mail to " . $to . PHP_EOL;
 
         $data = [];
         $mail = Creator::createObject([
             'class' => '\Mindy\Mail\Mailer',
-            'useFileTransport' => true
         ]);
-        $mail->compose([
-            'text' => "mail/test.txt",
-            'html' => "mail/test.html"
-        ], $data)->setTo($to)->setSubject("Test mail")->send();
+        $status = $mail->compose([
+            'text' => $template . ".txt",
+            'html' => $template . ".html"
+        ], $data)->setTo($to)->setFrom($from)->setSubject("Test mail")->send();
+        echo ($status ? "Success" : "Failed") . PHP_EOL;
     }
 }
