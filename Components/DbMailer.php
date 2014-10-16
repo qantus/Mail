@@ -2,7 +2,7 @@
 
 namespace Modules\Mail\Components;
 
-use Mindy\Base\Exception\HttpException;
+use Mindy\Exception\HttpException;
 use Mindy\Base\Mindy;
 use Mindy\Helper\Console;
 use Mindy\Mail\Mailer;
