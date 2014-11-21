@@ -50,7 +50,8 @@ class SubscribeController extends CoreController
                 }
             }
         } else {
-            $this->error(404);
+            $this->request->flash->warning(MailModule::t("Incorrect email address"));
+            $this->request->redirect(($url = $this->getNextUrl()) ? $url : '/');
         }
     }
 

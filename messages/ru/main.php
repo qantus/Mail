@@ -25,5 +25,6 @@ return array(
     'Email' => 'Электронный адрес почты',
     'You are already subscribed' => 'Вы уже подписаны на рассылку',
     'You are successfully subscribed' => 'Вы успешно подписаны на рассылку',
-    'You are successfully unsubscribed' => 'Вы успешно отписались от рассылки'
+    'You are successfully unsubscribed' => 'Вы успешно отписались от рассылки',
+    'Incorrect email address' => 'Некорректный адрес электронный почты'
 );
