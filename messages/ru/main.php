@@ -13,7 +13,7 @@ return array (
   'Created at' => 'Время создания',
   'Readed at' => 'Время прочтения',
   'Email' => 'Электронный адрес почты',
-  'Token' => '',
+  'Token' => 'Токен',
   'You are successfully unsubscribed' => 'Вы успешно отписались от рассылки',
   'Mail' => 'Почта',
   'Create mail' => 'Создать письмо',
