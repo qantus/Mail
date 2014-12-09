@@ -33,6 +33,7 @@ class Subscribe extends Model
                 'class' => CharField::className(),
                 'verboseName' => MailModule::t('Token'),
                 'editable' => false,
+                'null' => true,
                 'length' => 10
             ]
         ];
