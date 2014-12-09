@@ -14,6 +14,7 @@
 
 namespace Modules\Mail\Controllers;
 
+use Mindy\Base\Mindy;
 use Modules\Core\Controllers\CoreController;
 use Modules\Mail\MailModule;
 use Modules\Mail\Models\Subscribe;
@@ -32,7 +33,15 @@ class SubscribeController extends CoreController
                 if ($model->isValid()) {
                     $model->save();
                 }
-
+                if ($this->request->getIsAjax()) {
+                    echo $this->json([
+                        'status' => true,
+                        'message' => [
+                            'title' => MailModule::t("You are successfully subscribed")
+                        ]
+                    ]);
+                    Mindy::app()->end();
+                }
                 $this->request->flash->warning(MailModule::t("You are successfully subscribed"));
 
                 if ($url = $this->getNextUrl()) {
