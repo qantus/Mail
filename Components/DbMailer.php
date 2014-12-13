@@ -39,7 +39,7 @@ class DbMailer extends Mailer
             'subject' => $subject
         ], $data));
         $msg->setTo($receiver);
-        $msg->setFrom(ParamsHelper::get('core.core.email_owner'));
+        $msg->setFrom(Mindy::app()->managers);
         $msg->setSubject($subject);
         if (!empty($attachments)) {
             if (!is_array($attachments)) {
