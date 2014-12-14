@@ -50,6 +50,16 @@ class SubscribeController extends CoreController
                     echo $this->render('mail/subscribe_success.html');
                 }
             } else {
+                if ($this->request->getIsAjax()) {
+                    echo $this->json([
+                        'status' => true,
+                        'message' => [
+                            'title' => MailModule::t("You are already subscribed")
+                        ] 
+                    ]);
+                    Mindy::app()->end();
+                }
+
                 $this->request->flash->warning(MailModule::t("You are already subscribed"));
 
                 if ($url = $this->getNextUrl()) {
