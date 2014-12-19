@@ -3,6 +3,8 @@
 namespace Modules\Mail\Forms;
 
 use Mindy\Base\Mindy;
+use Mindy\Form\Fields\AceField;
+use Mindy\Form\Fields\CharField;
 use Mindy\Form\Fields\CheckboxField;
 use Mindy\Form\Fields\TextAreaField;
 use Mindy\Form\Fields\TextField;
@@ -19,7 +21,7 @@ class MailTemplateForm extends ModelForm
             $codes = [];
             if (Mindy::app()->hasModule($this->getModel()->module)) {
                 $module = Mindy::app()->getModule($this->getModel()->module);
-                if(isset($module->mailTemplates[$this->getModel()->code])) {
+                if (isset($module->mailTemplates[$this->getModel()->code])) {
                     $codes = $module->mailTemplates[$this->getModel()->code];
                 }
             };
@@ -39,18 +41,18 @@ class MailTemplateForm extends ModelForm
 
         $fields = [
             'code' => [
-                'class' => TextField::className(),
+                'class' => CharField::className(),
             ],
             'subject' => [
-                'class' => TextField::className(),
+                'class' => CharField::className(),
                 'hint' => $hint
             ],
             'template' => [
-                'class' => TextAreaField::className(),
+                'class' => AceField::className(),
             ],
         ];
 
-        if(Mindy::app()->user && Mindy::app()->user->is_superuser) {
+        if (Mindy::app()->user && Mindy::app()->user->is_superuser) {
             $fields['is_locked'] = CheckboxField::className();
         }
 
