@@ -25,7 +25,7 @@ class DbMailer extends Mailer
         $subject = $this->renderString($template->subject, $data);
         $message = $this->renderString($template->template, $data);
         if ($this->checker) {
-            $url = Mindy::app()->urlManager->reverse('mail.checker', ['id' => $template->pk]);
+            $url = Mindy::app()->urlManager->reverse('mail:checker', ['id' => $template->pk]);
             $absUrl = Mindy::app()->request->http->absoluteUrl($url);
             $message .= "<img width='1' height='1' src='{$absUrl}'>";
         }
