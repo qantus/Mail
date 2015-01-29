@@ -12,6 +12,8 @@ use Modules\Mail\Models\MailTemplate;
 
 class DbMailer extends Mailer
 {
+    public $debug = false;
+
     /**
      * @var bool enable reading email checker
      */
@@ -86,7 +88,7 @@ class DbMailer extends Mailer
     {
         $maildb = MailTemplate::objects()->filter(['code' => $code])->get();
         if ($maildb === null) {
-            if (YII_DEBUG) {
+            if ($this->debug) {
                 throw new HttpException(500, "Mail template with code $code do not exists");
             } else {
                 return false;
