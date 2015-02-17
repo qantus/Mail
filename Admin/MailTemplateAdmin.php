@@ -31,7 +31,7 @@ class MailTemplateAdmin extends ModelAdmin
 
     public function getColumns()
     {
-        return ['id', 'code', 'subject'];
+        return ['code', 'subject'];
     }
     /**
      * @return \Mindy\Orm\Model
