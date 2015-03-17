@@ -88,11 +88,7 @@ class DbMailer extends Mailer
     {
         $maildb = MailTemplate::objects()->filter(['code' => $code])->get();
         if ($maildb === null) {
-            if ($this->debug) {
-                throw new HttpException(500, "Mail template with code $code do not exists");
-            } else {
-                return false;
-            }
+            throw new HttpException(500, "Mail template with code $code do not exists");
         }
         return $maildb;
     }
