@@ -7,7 +7,17 @@ use Mindy\Base\Module;
 
 class MailModule extends Module
 {
+    /**
+     * Path to logo
+     * @var string
+     */
     public $logoPath;
+
+    /**
+     * Convert icon to base64
+     * @var bool
+     */
+    public $convert64 = false;
 
     public function getMenu()
     {

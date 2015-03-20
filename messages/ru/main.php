@@ -38,4 +38,5 @@ return array (
   'Create subscribe' => 'Добавить подписку',
   'Update subscribe: {name}' => 'Редактирование подписки',
   'Update mail template: {name}' => 'Редактирование почтового шаблона: {name}',
+  'Website' => 'Сайт'
 );
