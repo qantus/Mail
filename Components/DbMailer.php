@@ -38,6 +38,7 @@ class DbMailer extends Mailer
         ], array_merge([
             'content' => $message,
             'logoPath' => Mindy::app()->getModule('Mail')->logoPath,
+            'convert64' => Mindy::app()->getModule('Mail')->convert64,
             'subject' => $subject
         ], $data));
         $msg->setTo($receiver);
