@@ -29,6 +29,7 @@ return array (
   'Subscribe {url} was created' => 'Подписка {url} была оформлена',
   'Subscribe {url} was updated' => 'Подписка {url} была обновлена',
   'Subscribe {url} was deleted' => 'Подписка {url} была удалена',
+  'Website' => 'Сайт',
   'You are successfully unsubscribed' => 'Вы успешно отписались от рассылки',
   'Create mail' => 'Создать письмо',
   'Update mail' => 'Обновить письмо',
@@ -38,5 +39,4 @@ return array (
   'Create subscribe' => 'Добавить подписку',
   'Update subscribe: {name}' => 'Редактирование подписки',
   'Update mail template: {name}' => 'Редактирование почтового шаблона: {name}',
-  'Website' => 'Сайт'
 );

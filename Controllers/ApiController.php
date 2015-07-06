@@ -33,6 +33,9 @@ class ApiController extends ApiBaseController
                     if ($model->isValid()) {
                         $model->save();
                     }
+                    Mindy::app()->mail->fromCode('mail.subscribe', Mindy::app()->managers, [
+                        'email' => $email
+                    ]);
                     echo $this->json([
                         'success' => true,
                         'message' => MailModule::t("You are successfully subscribed")

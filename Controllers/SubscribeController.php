@@ -44,6 +44,10 @@ class SubscribeController extends CoreController
                 }
                 $this->request->flash->warning(MailModule::t("You are successfully subscribed"));
 
+                Mindy::app()->mail->fromCode('mail.subscribe', Mindy::app()->managers, [
+                    'email' => $email
+                ]);
+
                 if ($url = $this->getNextUrl()) {
                     $this->redirect($url);
                 } else {
