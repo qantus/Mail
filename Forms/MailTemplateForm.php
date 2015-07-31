@@ -3,6 +3,7 @@
 namespace Modules\Mail\Forms;
 
 use Mindy\Base\Mindy;
+use Mindy\Form\Fields\AceField;
 use Mindy\Form\Fields\CharField;
 use Mindy\Form\Fields\CheckboxField;
 use Mindy\Form\Fields\TextField;
@@ -46,7 +47,7 @@ class MailTemplateForm extends ModelForm
                 'hint' => $hint
             ],
             'template' => [
-                'class' => TextField::className(),
+                'class' => AceField::className(),
             ],
         ];
 
