@@ -14,6 +14,8 @@ class DbMailer extends Mailer
 {
     public $debug = false;
 
+    public $checkerDomain = '';
+
     /**
      * @var bool enable reading email checker
      */
@@ -29,9 +31,10 @@ class DbMailer extends Mailer
 
         $checker = '';
         if ($this->checker) {
-            $url = Mindy::app()->urlManager->reverse('mail:checker', ['uniqueId' => $uniq]);
-            $absUrl = Mindy::app()->request->http->absoluteUrl($url);
-            $checker = "<img style='width: 1px !important; height: 1px !important' src='{$absUrl}'>";
+            $url = $this->checkerDomain . Mindy::app()->urlManager->reverse('mail:checker', ['uniqueId' => $uniq]);
+            $checker = strtr("<img style='width: 1px !important; height: 1px !important;' src='{url}'>", [
+                '{url}' => $url
+            ]);
         }
 
         $text = $this->renderTemplate("mail/message.txt", [
