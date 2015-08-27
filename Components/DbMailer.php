@@ -26,21 +26,36 @@ class DbMailer extends Mailer
 
         $subject = $this->renderString($template->subject, $data);
         $message = $this->renderString($template->template, $data);
+
+        $checker = '';
         if ($this->checker) {
-            $url = Mindy::app()->urlManager->reverse('mail:checker', ['id' => $template->pk]);
+            $url = Mindy::app()->urlManager->reverse('mail:checker', ['uniqueId' => $uniq]);
             $absUrl = Mindy::app()->request->http->absoluteUrl($url);
-            $message .= "<img width='1' height='1' src='{$absUrl}'>";
+            $checker = "<img style='width: 1px !important; height: 1px !important' src='{$absUrl}'>";
         }
 
-        $msg = $this->compose([
-            'text' => "mail/message.txt",
-            'html' => "mail/message.html",
-        ], array_merge([
+        $text = $this->renderTemplate("mail/message.txt", [
             'content' => $message,
-            'logoPath' => Mindy::app()->getModule('Mail')->logoPath,
-            'convert64' => Mindy::app()->getModule('Mail')->convert64,
             'subject' => $subject
-        ], $data));
+        ]);
+        $html = $this->renderTemplate("mail/message.html", [
+            'content' => $message . $checker,
+            'subject' => $subject
+        ]);
+
+        /** @var \Mindy\Mail\MessageInterface $msg */
+        $msg = $this->createMessage();
+        $msg->setHtmlBody($html);
+        if (isset($text)) {
+            $msg->setTextBody($text);
+        } else if (isset($html)) {
+            if (preg_match('|<body[^>]*>(.*?)</body>|is', $html, $match)) {
+                $html = $match[1];
+            }
+            $html = preg_replace('|<style[^>]*>(.*?)</style>|is', '', $html);
+            $msg->setTextBody(strip_tags($html));
+        }
+
         $msg->setTo($receiver);
         $msg->setFrom(Mindy::app()->managers);
         $msg->setSubject($subject);
@@ -64,10 +79,12 @@ class DbMailer extends Mailer
 
         if ($result = $msg->send()) {
             $model = new Mail([
-                'receiver' => implode(', ', $receivers),
+                'email' => implode(', ', $receivers),
                 'subject' => $subject,
-                'message' => $message,
+                'message_txt' => $text,
+                'message_html' => $html,
                 'unique_id' => $uniq,
+                'is_sended' => true
             ]);
             $model->save();
             return [$subject, $message];

@@ -26,7 +26,7 @@ class MailCommand extends ConsoleCommand
 {
     use RenderTrait;
 
-    public function actionIndex($to, $from = 'admin@admin.com', $template = "mail/test")
+    public function actionSend($to, $from = 'admin@admin.com', $template = "mail/test")
     {
         echo "Sending test mail to " . $to . PHP_EOL;
 
@@ -35,6 +35,14 @@ class MailCommand extends ConsoleCommand
             'text' => $template . ".txt",
             'html' => $template . ".html"
         ], $data)->setTo($to)->setFrom($from)->setSubject("Test mail")->send();
+        echo ($status ? "Success" : "Failed") . PHP_EOL;
+    }
+
+    public function actionSendDB($to, $from = 'admin@admin.com', $code = "test")
+    {
+        echo "Sending test mail to " . $to . PHP_EOL;
+
+        $status = Mindy::app()->mail->fromCode($code, $to);
         echo ($status ? "Success" : "Failed") . PHP_EOL;
     }
 
@@ -84,6 +92,7 @@ class MailCommand extends ConsoleCommand
 
         $qb = Mindy::app()->db->getDb()->getQueryBuilder();
         $queueItems = Mail::objects()->filter([
+            'queue__isnull' => false,
             'is_sended' => false
         ])->limit($perCycle)->offset(0)->order(['-id'])->all();
 

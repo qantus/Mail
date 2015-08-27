@@ -13,12 +13,6 @@ class MailModule extends Module
      */
     public $logoPath;
 
-    /**
-     * Convert icon to base64
-     * @var bool
-     */
-    public $convert64 = false;
-
     public function getMenu()
     {
         return [

@@ -28,7 +28,8 @@ class Mail extends Model
             'queue' => [
                 'class' => ForeignField::className(),
                 'modelClass' => Queue::className(),
-                'verboseName' => MailModule::t('Queue')
+                'verboseName' => MailModule::t('Queue'),
+                'null' => true
             ],
             'email' => [
                 'class' => EmailField::className(),
@@ -116,6 +117,12 @@ class Mail extends Model
                 ->setFrom($from)
                 ->setSubject($this->subject)
                 ->send();
+
+            if ($sended) {
+                $this->sended = true;
+                $this->save(['sended']);
+            }
+
         } catch (Exception $e) {
             $exception = $e->getMessage();
             $sended = false;
