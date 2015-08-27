@@ -50,6 +50,7 @@ class MailCommand extends ConsoleCommand
     {
         $perCycle = ParamsHelper::get('mail.queue.per_cycle_items_count', 15);
 
+        $qb = Mindy::app()->db->getDb()->getQueryBuilder();
         $urlManager = Mindy::app()->urlManager;
 
         Mail::objects()->truncate();
@@ -57,6 +58,9 @@ class MailCommand extends ConsoleCommand
 
         $queues = Queue::objects()->filter(['is_running' => false])->incomplete()->all();
         foreach ($queues as $q) {
+            $q->started_at = date($qb->dateTimeFormat);
+            $q->save(['started_at']);
+
             $data = unserialize($q->data);
             $data = is_array($data) ? $data : [];
 
@@ -92,18 +96,24 @@ class MailCommand extends ConsoleCommand
 
         $qb = Mindy::app()->db->getDb()->getQueryBuilder();
         $queueItems = Mail::objects()->filter([
-            'queue__isnull' => false,
+            'queue_id__isnull' => false,
             'is_sended' => false
         ])->limit($perCycle)->offset(0)->order(['-id'])->all();
 
         foreach ($queueItems as $item) {
             list($sended, $error) = $item->send();
-            if ($sended) {
-                $item->is_sended = date($qb->dateTimeFormat);
-                $item->save(['is_sended']);
-            } else {
+            if ($sended == false) {
                 $item->error = $error;
                 $item->save(['error']);
+            }
+        }
+
+        $queues = Queue::objects()->filter(['is_running' => true])->incomplete()->all();
+        foreach ($queues as $queue) {
+            if ($queue->getCount() == 0) {
+                $queue->is_complete = true;
+                $queue->stopped_at = date($qb->dateTimeFormat);
+                $queue->save(['is_complete', 'stopped_at']);
             }
         }
     }

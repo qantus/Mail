@@ -76,12 +76,6 @@ class Queue extends Model
                 'verboseName' => MailModule::t('Stopped at'),
                 'null' => true
             ],
-            'count' => [
-                'class' => IntField::className(),
-                'verboseName' => MailModule::t('Count in queue'),
-                'editable' => false,
-                'default' => 0
-            ],
             'is_running' => [
                 'class' => BooleanField::className(),
                 'verboseName' => MailModule::t('Is running'),
@@ -118,5 +112,10 @@ class Queue extends Model
             $owner->user = Mindy::app()->getUser();
             $owner->count = $owner->subscribers->count();
         }
+    }
+
+    public function getCount()
+    {
+        return Mail::objects()->filter(['is_sended' => false, 'queue' => $this])->count();
     }
 }

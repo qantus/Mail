@@ -119,8 +119,8 @@ class Mail extends Model
                 ->send();
 
             if ($sended) {
-                $this->sended = true;
-                $this->save(['sended']);
+                $this->is_sended = true;
+                $this->save(['is_sended']);
             }
 
         } catch (Exception $e) {
