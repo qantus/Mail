@@ -35,6 +35,16 @@ class MailModule extends Module
                     'icon' => 'icon-mail'
                 ],
                 [
+                    'name' => self::t('Queue'),
+                    'adminClass' => 'QueueAdmin',
+                    'icon' => 'icon-mail'
+                ],
+                [
+                    'name' => self::t('Queue items'),
+                    'adminClass' => 'QueueItemAdmin',
+                    'icon' => 'icon-mail'
+                ],
+                [
                     'name' => self::t('Subscribes'),
                     'adminClass' => 'SubscribeAdmin',
                     'icon' => 'icon-mail'

@@ -52,9 +52,19 @@ class DbMailer extends Mailer
                 $msg->attach($file);
             }
         }
+
+        $receivers = [];
+        if (is_array($receiver)) {
+            foreach ($receiver as $r) {
+                $receivers[] = $r;
+            }
+        } else {
+            $receivers[] = $receiver;
+        }
+
         if ($result = $msg->send()) {
             $model = new Mail([
-                'receiver' => is_array($receiver) ? key($receiver) : $receiver,
+                'receiver' => implode(', ', $receivers),
                 'subject' => $subject,
                 'message' => $message,
                 'unique_id' => $uniq,

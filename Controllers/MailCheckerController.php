@@ -2,6 +2,7 @@
 
 namespace Modules\Mail\Controllers;
 
+use Mindy\Base\Mindy;
 use Modules\Core\Controllers\CoreController;
 use Modules\Mail\Models\Mail;
 
@@ -12,15 +13,17 @@ class MailCheckerController extends CoreController
         return ['index'];
     }
 
-    public function actionIndex($id)
+    public function actionIndex($uniqueId)
     {
-        $model = Mail::objects()->filter(['pk' => $id, 'readed_at__isnull' => true])->get();
-        if ($model) {
-            $model->save(['readed_at']);
+        $model = Mail::objects()->get(['unique_id' => $uniqueId]);
+        if ($model !== null) {
+            $qb = Mindy::app()->db->getDb()->getQueryBuilder();
+            $model->is_read = true;
+            $model->readed_at = date($qb->dateTimeFormat);
+            $model->save(['is_read', 'readed_at']);
         }
 
-        $data = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4Xw8AAoABf5/NhYYAAAAASUVORK5CYII=";
         header("Content-type: image/png");
-        echo base64_decode($data);
+        echo base64_decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4Xw8AAoABf5/NhYYAAAAASUVORK5CYII=");
     }
 }

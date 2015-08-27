@@ -9,7 +9,7 @@ return [
         'name' => 'subscribe',
         'callback' => '\Modules\Mail\Controllers\SubscribeController:subscribe'
     ],
-    '/checker/{id:\d+}' => [
+    '/checker/{uniqueId:c}' => [
         'name' => 'checker',
         'callback' => '\Modules\Mail\Controllers\MailCheckerController:index'
     ],
