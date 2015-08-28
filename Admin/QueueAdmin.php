@@ -10,10 +10,18 @@ namespace Modules\Mail\Admin;
 
 use Modules\Admin\Components\ModelAdmin;
 use Modules\Mail\Forms\QueueForm;
+use Modules\Mail\MailModule;
 use Modules\Mail\Models\Queue;
 
 class QueueAdmin extends ModelAdmin
 {
+    public function verboseNames()
+    {
+        return [
+            'count' => MailModule::t('Count')
+        ];
+    }
+
     public function getCreateForm()
     {
         return QueueForm::className();
