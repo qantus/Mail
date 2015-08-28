@@ -88,7 +88,7 @@ class Mail extends Model
 
     public function send()
     {
-        $from = ParamsHelper::get('mail.queue.from', 'admin@example.com');
+        $from = Mindy::app()->getModule('Mail')->from;
 
         $exception = null;
 

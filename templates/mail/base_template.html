@@ -17,11 +17,7 @@
                                 <tr>
                                     <td style="text-align: left; vertical-align: middle;">
                                         {% block logo %}
-                                            {% if convert64 %}
-                                                <img src='{{ convert_base64(logoPath) }}'/>
-                                            {% else %}
-                                                <img src='{{ request.http.getHostInfo() }}{{ logoPath }}'/>
-                                            {% endif %}
+                                            <img src='{{ request.http.getHostInfo() }}{{ logoPath }}'/>
                                         {% endblock %}
                                     </td>
                                 </tr>

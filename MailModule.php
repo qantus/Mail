@@ -7,11 +7,7 @@ use Mindy\Base\Module;
 
 class MailModule extends Module
 {
-    /**
-     * Path to logo
-     * @var string
-     */
-    public $logoPath;
+    public $from = 'admin@example.com';
 
     public function getMenu()
     {

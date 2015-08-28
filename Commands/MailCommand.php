@@ -46,15 +46,10 @@ class MailCommand extends ConsoleCommand
         echo ($status ? "Success" : "Failed") . PHP_EOL;
     }
 
-    public function actionStartQueue($domain)
+    public function actionStartQueue($domain, $count = 15)
     {
-        $perCycle = ParamsHelper::get('mail.queue.per_cycle_items_count', 15);
-
         $qb = Mindy::app()->db->getDb()->getQueryBuilder();
         $urlManager = Mindy::app()->urlManager;
-
-        Mail::objects()->truncate();
-        Queue::objects()->filter(['pk' => 1])->update(['is_running' => false]);
 
         $queues = Queue::objects()->filter(['is_running' => false])->incomplete()->all();
         foreach ($queues as $q) {
@@ -98,7 +93,7 @@ class MailCommand extends ConsoleCommand
         $queueItems = Mail::objects()->filter([
             'queue_id__isnull' => false,
             'is_sended' => false
-        ])->limit($perCycle)->offset(0)->order(['-id'])->all();
+        ])->limit($count)->offset(0)->order(['-id'])->all();
 
         foreach ($queueItems as $item) {
             list($sended, $error) = $item->send();
