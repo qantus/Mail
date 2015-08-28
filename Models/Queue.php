@@ -110,7 +110,6 @@ class Queue extends Model
     {
         if ($isNew) {
             $owner->user = Mindy::app()->getUser();
-            $owner->count = $owner->subscribers->count();
         }
     }
 
