@@ -7,6 +7,15 @@ use Mindy\Base\Module;
 
 class MailModule extends Module
 {
+    /**
+     * used for queues
+     * @var string
+     */
+    public $domain = 'example.com';
+    /**
+     * used for queues
+     * @var string
+     */
     public $from = 'admin@example.com';
 
     public function getMenu()

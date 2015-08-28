@@ -46,8 +46,9 @@ class MailCommand extends ConsoleCommand
         echo ($status ? "Success" : "Failed") . PHP_EOL;
     }
 
-    public function actionStartQueue($domain, $count = 15)
+    public function actionStartQueue($count = 15)
     {
+        $domain = Mindy::app()->getModule('Mail')->domain;
         $qb = Mindy::app()->db->getDb()->getQueryBuilder();
         $urlManager = Mindy::app()->urlManager;
 
