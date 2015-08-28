@@ -2,8 +2,15 @@
 
 namespace Modules\Mail\Commands;
 
+use Exception;
+use Mindy\Base\Mindy;
 use Mindy\Console\ConsoleCommand;
 use Mindy\Helper\Creator;
+use Mindy\Utils\RenderTrait;
+use Modules\Core\Components\ParamsHelper;
+use Modules\Mail\Models\Mail;
+use Modules\Mail\Models\Queue;
+use Modules\Mail\Models\QueueItem;
 
 /**
  * All rights reserved.
@@ -17,18 +24,97 @@ use Mindy\Helper\Creator;
  */
 class MailCommand extends ConsoleCommand
 {
-    public function actionIndex($to, $from = 'admin@admin.com', $template = "mail/test")
+    use RenderTrait;
+
+    public function actionSend($to, $from = 'admin@admin.com', $template = "mail/test")
     {
         echo "Sending test mail to " . $to . PHP_EOL;
 
         $data = [];
-        $mail = Creator::createObject([
-            'class' => '\Mindy\Mail\Mailer',
-        ]);
-        $status = $mail->compose([
+        $status = Mindy::app()->mail->compose([
             'text' => $template . ".txt",
             'html' => $template . ".html"
         ], $data)->setTo($to)->setFrom($from)->setSubject("Test mail")->send();
         echo ($status ? "Success" : "Failed") . PHP_EOL;
+    }
+
+    public function actionSendDB($to, $from = 'admin@admin.com', $code = "test")
+    {
+        echo "Sending test mail to " . $to . PHP_EOL;
+
+        $status = Mindy::app()->mail->fromCode($code, $to);
+        echo ($status ? "Success" : "Failed") . PHP_EOL;
+    }
+
+    public function actionStartQueue($domain)
+    {
+        $perCycle = ParamsHelper::get('mail.queue.per_cycle_items_count', 15);
+
+        $qb = Mindy::app()->db->getDb()->getQueryBuilder();
+        $urlManager = Mindy::app()->urlManager;
+
+        Mail::objects()->truncate();
+        Queue::objects()->filter(['pk' => 1])->update(['is_running' => false]);
+
+        $queues = Queue::objects()->filter(['is_running' => false])->incomplete()->all();
+        foreach ($queues as $q) {
+            $q->started_at = date($qb->dateTimeFormat);
+            $q->save(['started_at']);
+
+            $data = unserialize($q->data);
+            $data = is_array($data) ? $data : [];
+
+            foreach ($q->subscribers->batch(100) as $subscribers) {
+                foreach ($subscribers as $subscriber) {
+                    $uniqueId = md5($subscriber->email . $q->created_at);
+                    $url = $domain . $urlManager->reverse('mail:checker', ['id' => $uniqueId]);
+                    $checker = strtr("<img style='width: 1px !important; height: 1px !important;' src='{url}'>", [
+                        '{url}' => $url
+                    ]);
+                    $attributes = [
+                        'queue' => $q,
+                        'subject' => $this->renderString($q->subject, $data),
+                        'message_txt' => $this->renderTemplate($q->template . ".txt", [
+                            'content' => $this->renderString($q->message, $data),
+                        ]),
+                        'message_html' => $this->renderTemplate($q->template . ".html", [
+                            'content' => $this->renderString($q->message, $data) . $checker,
+                        ]),
+                        'email' => $subscriber->email,
+                        'unique_id' => $uniqueId
+                    ];
+
+                    $item = new Mail($attributes);
+                    if ($item->save() === false) {
+                        throw new Exception("Failed to save QueueItem model");
+                    }
+                }
+            }
+            $q->is_running = true;
+            $q->save(['is_running']);
+        }
+
+        $qb = Mindy::app()->db->getDb()->getQueryBuilder();
+        $queueItems = Mail::objects()->filter([
+            'queue_id__isnull' => false,
+            'is_sended' => false
+        ])->limit($perCycle)->offset(0)->order(['-id'])->all();
+
+        foreach ($queueItems as $item) {
+            list($sended, $error) = $item->send();
+            if ($sended == false) {
+                $item->error = $error;
+                $item->save(['error']);
+            }
+        }
+
+        $queues = Queue::objects()->filter(['is_running' => true])->incomplete()->all();
+        foreach ($queues as $queue) {
+            if ($queue->getCount() == 0) {
+                $queue->is_complete = true;
+                $queue->stopped_at = date($qb->dateTimeFormat);
+                $queue->save(['is_complete', 'stopped_at']);
+            }
+        }
     }
 }

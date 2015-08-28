@@ -13,12 +13,6 @@ class MailModule extends Module
      */
     public $logoPath;
 
-    /**
-     * Convert icon to base64
-     * @var bool
-     */
-    public $convert64 = false;
-
     public function getMenu()
     {
         return [
@@ -32,6 +26,16 @@ class MailModule extends Module
                 [
                     'name' => self::t('Mail'),
                     'adminClass' => 'MailAdmin',
+                    'icon' => 'icon-mail'
+                ],
+                [
+                    'name' => self::t('Queue'),
+                    'adminClass' => 'QueueAdmin',
+                    'icon' => 'icon-mail'
+                ],
+                [
+                    'name' => self::t('Queue items'),
+                    'adminClass' => 'QueueItemAdmin',
                     'icon' => 'icon-mail'
                 ],
                 [
