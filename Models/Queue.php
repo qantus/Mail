@@ -114,6 +114,11 @@ class Queue extends Model
         }
     }
 
+    public function beforeDelete($owner)
+    {
+        Mail::objects()->filter(['queue' => $owner])->delete();
+    }
+
     public function getCount()
     {
         return Mail::objects()->filter(['is_sended' => false, 'queue' => $this])->count();
