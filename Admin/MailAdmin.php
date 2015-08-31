@@ -14,15 +14,25 @@
 
 namespace Modules\Mail\Admin;
 
+use Mindy\Orm\Model;
 use Modules\Admin\Components\ModelAdmin;
 use Modules\Mail\Models\Mail;
 
 class MailAdmin extends ModelAdmin
 {
+    /**
+     * @param Model $model
+     * @return \Mindy\Orm\QuerySet
+     */
+    public function getQuerySet(Model $model)
+    {
+        return parent::getQuerySet($model)->order(['-id']);
+    }
+
     public function getColumns()
     {
         return [
-            'receiver',
+            'email',
             'subject',
             'created_at',
             'readed_at'

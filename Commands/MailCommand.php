@@ -5,12 +5,9 @@ namespace Modules\Mail\Commands;
 use Exception;
 use Mindy\Base\Mindy;
 use Mindy\Console\ConsoleCommand;
-use Mindy\Helper\Creator;
 use Mindy\Utils\RenderTrait;
-use Modules\Core\Components\ParamsHelper;
 use Modules\Mail\Models\Mail;
 use Modules\Mail\Models\Queue;
-use Modules\Mail\Models\QueueItem;
 
 /**
  * All rights reserved.
@@ -74,7 +71,8 @@ class MailCommand extends ConsoleCommand
                             'content' => $this->renderString($q->message, $data),
                         ]),
                         'message_html' => $this->renderTemplate($q->template . ".html", [
-                            'content' => $this->renderString($q->message, $data) . $checker,
+                            'content' => $this->renderString($q->message, $data),
+                            'checker' => $checker
                         ]),
                         'email' => $subscriber->email,
                         'unique_id' => $uniqueId
