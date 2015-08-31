@@ -69,7 +69,7 @@ class Mail extends Model
             ],
             'readed_at' => [
                 'class' => DateTimeField::className(),
-                'verboseName' => MailModule::t('readed at'),
+                'verboseName' => MailModule::t('Readed at'),
                 'null' => true
             ],
             'unique_id' => [

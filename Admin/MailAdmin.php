@@ -16,10 +16,16 @@ namespace Modules\Mail\Admin;
 
 use Mindy\Orm\Model;
 use Modules\Admin\Components\ModelAdmin;
+use Modules\Mail\Forms\MailForm;
 use Modules\Mail\Models\Mail;
 
 class MailAdmin extends ModelAdmin
 {
+    public function getSearchFields()
+    {
+        return ['subject', 'email'];
+    }
+
     /**
      * @param Model $model
      * @return \Mindy\Orm\QuerySet
@@ -50,5 +56,10 @@ class MailAdmin extends ModelAdmin
     public function getModel()
     {
         return new Mail;
+    }
+
+    public function getCreateForm()
+    {
+        return MailForm::className();
     }
 }
