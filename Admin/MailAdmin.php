@@ -23,7 +23,7 @@ class MailAdmin extends ModelAdmin
 {
     public function getSearchFields()
     {
-        return ['subject', 'email'];
+        return ['subject', 'email', 'queue__name'];
     }
 
     /**
@@ -41,7 +41,8 @@ class MailAdmin extends ModelAdmin
             'email',
             'subject',
             'created_at',
-            'readed_at'
+            'readed_at',
+            'queue'
         ];
     }
 

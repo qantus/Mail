@@ -26,23 +26,23 @@ class MailModule extends Module
                 [
                     'name' => self::t('Mail templates'),
                     'adminClass' => 'MailTemplateAdmin',
-                    'icon' => 'icon-mail'
                 ],
                 [
                     'name' => self::t('Mail'),
                     'adminClass' => 'MailAdmin',
-                    'icon' => 'icon-mail'
                 ],
                 [
                     'name' => self::t('Queue'),
                     'adminClass' => 'QueueAdmin',
-                    'icon' => 'icon-mail'
                 ],
                 [
                     'name' => self::t('Subscribes'),
                     'adminClass' => 'SubscribeAdmin',
-                    'icon' => 'icon-mail'
-                ]
+                ],
+                [
+                    'name' => self::t('Url checker'),
+                    'adminClass' => 'UrlCheckerAdmin',
+                ],
             ]
         ];
     }

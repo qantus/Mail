@@ -15,6 +15,7 @@ use Mindy\Orm\Fields\CharField;
 use Mindy\Orm\Fields\DateTimeField;
 use Mindy\Orm\Fields\EmailField;
 use Mindy\Orm\Fields\ForeignField;
+use Mindy\Orm\Fields\HasManyField;
 use Mindy\Orm\Fields\TextField;
 use Mindy\Orm\Model;
 use Modules\Core\Components\ParamsHelper;
@@ -77,13 +78,21 @@ class Mail extends Model
                 'length' => 40,
                 'verboseName' => MailModule::t('Unique id'),
                 'editable' => false,
+            ],
+            'urls' => [
+                'class' => HasManyField::className(),
+                'modelClass' => UrlChecker::className(),
+                'verboseName' => MailModule::t('Checker urls')
             ]
         ];
     }
 
     public function __toString()
     {
-        return (string)strtr("0 1", [$this->email, $this->created_at]);
+        return (string)strtr("{email} {created_at}", [
+            '{email}' => $this->email,
+            '{created_at}' => $this->created_at
+        ]);
     }
 
     public function send()

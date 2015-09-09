@@ -43,7 +43,7 @@ class MailCommand extends ConsoleCommand
         echo ($status ? "Success" : "Failed") . PHP_EOL;
     }
 
-    public function actionStartQueue($count = 15)
+    public function actionStartQueue($count = 100)
     {
         $domain = Mindy::app()->getModule('Mail')->domain;
         $qb = Mindy::app()->db->getDb()->getQueryBuilder();
@@ -54,11 +54,10 @@ class MailCommand extends ConsoleCommand
             $q->started_at = date($qb->dateTimeFormat);
             $q->save(['started_at']);
 
-            $data = unserialize($q->data);
-            $data = is_array($data) ? $data : [];
-
             foreach ($q->subscribers->batch(100) as $subscribers) {
                 foreach ($subscribers as $subscriber) {
+                    $data = $subscriber->toArray();
+
                     $uniqueId = md5($subscriber->email . $q->created_at);
                     $url = $domain . $urlManager->reverse('mail:checker', ['id' => $uniqueId]);
                     $checker = strtr("<img style='width: 1px !important; height: 1px !important;' src='{url}'>", [
@@ -68,11 +67,13 @@ class MailCommand extends ConsoleCommand
                         'queue' => $q,
                         'subject' => $this->renderString($q->subject, $data),
                         'message_txt' => $this->renderTemplate($q->template . ".txt", [
-                            'content' => $this->renderString($q->message, $data),
+                            'content' => $this->renderString($q->message_txt, $data),
+                            'uniqueId' => $uniqueId
                         ]),
                         'message_html' => $this->renderTemplate($q->template . ".html", [
-                            'content' => $this->renderString($q->message, $data),
-                            'checker' => $checker
+                            'content' => $this->renderString($q->message_html, $data),
+                            'checker' => $checker,
+                            'uniqueId' => $uniqueId
                         ]),
                         'email' => $subscriber->email,
                         'unique_id' => $uniqueId
