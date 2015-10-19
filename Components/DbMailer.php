@@ -80,7 +80,9 @@ class DbMailer extends Mailer
             $receivers[] = $receiver;
         }
 
-        if ($result = $msg->send()) {
+        $module = Mindy::app()->getModule('Mail');
+        $result = $module->delayedSend ? true : $msg->send();
+        if ($result) {
             $model = new Mail([
                 'email' => implode(', ', $receivers),
                 'subject' => $subject,

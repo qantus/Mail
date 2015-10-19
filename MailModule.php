@@ -2,7 +2,6 @@
 
 namespace Modules\Mail;
 
-use Mindy\Base\Mindy;
 use Mindy\Base\Module;
 
 class MailModule extends Module
@@ -12,6 +11,10 @@ class MailModule extends Module
      * @var string
      */
     public $domain = 'example.com';
+    /**
+     * @var bool
+     */
+    public $delayedSend = false;
     /**
      * used for queues
      * @var string

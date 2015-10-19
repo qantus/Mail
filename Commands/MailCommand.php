@@ -43,9 +43,26 @@ class MailCommand extends ConsoleCommand
         echo ($status ? "Success" : "Failed") . PHP_EOL;
     }
 
+    public function actionSendMail($count = 15)
+    {
+        $queueItems = Mail::objects()->filter([
+            'queue_id__isnull' => true,
+            'is_sended' => false
+        ])->limit($count)->offset(0)->order(['-id'])->all();
+
+        foreach ($queueItems as $item) {
+            list($sended, $error) = $item->send();
+            if ($sended == false) {
+                $item->error = $error;
+                $item->save(['error']);
+            }
+        }
+    }
+
     public function actionStartQueue($count = 15)
     {
         $domain = Mindy::app()->getModule('Mail')->domain;
+        /** @var \Mindy\Query\QueryBuilder $qb */
         $qb = Mindy::app()->db->getDb()->getQueryBuilder();
         $urlManager = Mindy::app()->urlManager;
 
