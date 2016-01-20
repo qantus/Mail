@@ -13,7 +13,6 @@ use Mindy\Orm\Fields\BooleanField;
 use Mindy\Orm\Fields\CharField;
 use Mindy\Orm\Fields\DateTimeField;
 use Mindy\Orm\Fields\ForeignField;
-use Mindy\Orm\Fields\IntField;
 use Mindy\Orm\Fields\ManyToManyField;
 use Mindy\Orm\Fields\TextField;
 use Mindy\Orm\Model;
@@ -44,14 +43,19 @@ class Queue extends Model
                 'class' => CharField::className(),
                 'verboseName' => MailModule::t('Subject')
             ],
-            'message' => [
+            'message_txt' => [
                 'class' => TextField::className(),
-                'verboseName' => MailModule::t('Message')
+                'verboseName' => MailModule::t('Message txt')
+            ],
+            'message_html' => [
+                'class' => TextField::className(),
+                'verboseName' => MailModule::t('Message html')
             ],
             'template' => [
                 'class' => CharField::className(),
                 'verboseName' => MailModule::t('Template'),
-                'default' => 'mail/message'
+                // 'default' => 'mail/message'
+                'default' => 'mail_template/index'
             ],
             'subscribers' => [
                 'class' => ManyToManyField::className(),
@@ -85,12 +89,6 @@ class Queue extends Model
                 'class' => BooleanField::className(),
                 'verboseName' => MailModule::t('Is complete'),
                 'editable' => false,
-            ],
-            'data' => [
-                'class' => TextField::className(),
-                'verboseName' => MailModule::t('Data'),
-                'editable' => false,
-                'null' => true
             ],
         ];
     }

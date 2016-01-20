@@ -25,9 +25,14 @@ class DbMailer extends Mailer
     {
         $uniq = uniqid();
         $template = $this->loadTemplateModel($code);
+        
+        $site = null;
+        if (Mindy::app()->hasModule('Sites')) {
+            $site = Mindy::app()->getModule('Sites')->getSite();
+        }
 
-        $subject = $this->renderString($template->subject, $data);
-        $message = $this->renderString($template->template, $data);
+        $subject = $this->renderString($template->subject, array_merge(['site' => $site], $data));
+        $message = $this->renderString($template->template, array_merge(['site' => $site], $data));
 
         $checker = '';
         if ($this->checker) {

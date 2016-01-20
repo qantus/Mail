@@ -14,14 +14,31 @@
 
 namespace Modules\Mail\Admin;
 
+use Mindy\Orm\Model;
 use Modules\Admin\Components\ModelAdmin;
 use Modules\Mail\Models\Subscribe;
 
 class SubscribeAdmin extends ModelAdmin
 {
+    public function getSearchFields()
+    {
+        return [
+            'name', 'email', 'phones', 'site', 'sub_category'
+        ];
+    }
+
+    /**
+     * @param Model $model
+     * @return QuerySet
+     */
+    public function getQuerySet(Model $model)
+    {
+        return $model->objects()->getQuerySet()->order(['name']);
+    }
+
     public function getColumns()
     {
-        return ['email'];
+        return ['name', 'email', 'phones', 'sub_category'];
     }
 
     /**

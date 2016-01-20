@@ -29,7 +29,7 @@ class QueueAdmin extends ModelAdmin
 
     public function getColumns()
     {
-        return ['name', 'subject', 'created_at', 'user', 'count', 'is_complete', 'started_at', 'stopped_at'];
+        return ['name', 'subject', 'count', 'is_complete', 'started_at', 'stopped_at'];
     }
 
     public function getModel()
