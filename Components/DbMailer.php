@@ -21,7 +21,7 @@ class DbMailer extends Mailer
      */
     public $checker = true;
 
-    public function fromCode($code, $receiver, $data = [], $attachments = [])
+    public function fromCode($code, $receiver, $data = [], $attachments = [], $template = 'mail/message')
     {
         $uniq = uniqid();
         $template = $this->loadTemplateModel($code);
@@ -42,11 +42,11 @@ class DbMailer extends Mailer
             ]);
         }
 
-        $text = $this->renderTemplate("mail/message.txt", [
+        $text = $this->renderTemplate($template . ".txt", [
             'content' => $message,
             'subject' => $subject
         ]);
-        $html = $this->renderTemplate("mail/message.html", [
+        $html = $this->renderTemplate($template . ".html", [
             'content' => $message . $checker,
             'subject' => $subject
         ]);
