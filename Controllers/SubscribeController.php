@@ -15,11 +15,11 @@
 namespace Modules\Mail\Controllers;
 
 use Mindy\Base\Mindy;
-use Modules\Core\Controllers\CoreController;
+use Modules\Core\Controllers\FrontendController;
 use Modules\Mail\MailModule;
 use Modules\Mail\Models\Subscribe;
 
-class SubscribeController extends CoreController
+class SubscribeController extends FrontendController
 {
     public function actionSubscribe()
     {

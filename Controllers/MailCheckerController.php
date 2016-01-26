@@ -3,10 +3,10 @@
 namespace Modules\Mail\Controllers;
 
 use Mindy\Base\Mindy;
-use Modules\Core\Controllers\CoreController;
+use Modules\Core\Controllers\FrontendController;
 use Modules\Mail\Models\Mail;
 
-class MailCheckerController extends CoreController
+class MailCheckerController extends FrontendController
 {
     public function allowedActions()
     {
