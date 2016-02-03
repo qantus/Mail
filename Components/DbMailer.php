@@ -24,15 +24,15 @@ class DbMailer extends Mailer
     public function fromCode($code, $receiver, $data = [], $attachments = [], $template = 'mail/message')
     {
         $uniq = uniqid();
-        $template = $this->loadTemplateModel($code);
+        $templateModel = $this->loadTemplateModel($code);
         
         $site = null;
         if (Mindy::app()->hasModule('Sites')) {
             $site = Mindy::app()->getModule('Sites')->getSite();
         }
 
-        $subject = $this->renderString($template->subject, array_merge(['site' => $site], $data));
-        $message = $this->renderString($template->template, array_merge(['site' => $site], $data));
+        $subject = $this->renderString($templateModel->subject, array_merge(['site' => $site], $data));
+        $message = $this->renderString($templateModel->template, array_merge(['site' => $site], $data));
 
         $checker = '';
         if ($this->checker) {
